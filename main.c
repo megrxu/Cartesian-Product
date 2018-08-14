@@ -23,13 +23,13 @@ int main()
 void product_iterator(unsigned char* set[], size_t size[], size_t count)
 {
     size_t all = 1;
-    for (int i = 0; i < count; i++) {
+    for (size_t i = 0; i < count; i++) {
         all *= size[i];
     }
     size_t* index;
     index = (size_t*)malloc(sizeof(size_t) * count);
     memset(index, 0x00, sizeof(size_t) * count);
-    for (int i = 0; i < all; i++) {
+    for (size_t i = 0; i < all; i++) {
         _product_iterator(set, index, count);
         increment(index, size, count);
     }
@@ -37,7 +37,7 @@ void product_iterator(unsigned char* set[], size_t size[], size_t count)
 
 void _product_iterator(unsigned char* set[], size_t index[], size_t count)
 {
-    for (int i = 0; i < count; i++) {
+    for (size_t i = 0; i < count; i++) {
         printf("%x ", set[i][index[i]]);
     }
     printf("\n");
