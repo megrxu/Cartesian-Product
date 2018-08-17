@@ -1,8 +1,13 @@
 CC ?= gcc
+NVCC ?= nvcc
 
-SOURCES = main.c
+COMPILE_FLAGS = -Wall -Wextra -g
 
-default: all
+default: product.out
+gpu: product-gpu.out
 
-all: main.c
-	${CC} $+ -o product.out -Wall -Wextra -g
+product.out: product.c c-product.c
+	$(CC) $+ -o $@
+
+product-gpu.out: product.cu c-product-gpu.cu
+	$(NVCC) $+ -o $@ 
