@@ -1,27 +1,43 @@
+#include "c-product.cuh"
 #include <stdio.h>
-#include <string.h>
-#include "c-product.h"
 
-void process(unsigned char* set[], size_t index[], size_t count);
+#define THREADS 256
+#define BLOCKS 16
 
 int main()
 {
-    unsigned char rset[3][3] = {
-        { 0x11, 0x22, 0x33 },
-        { 0x44, 0x55, 0x66 },
-        { 0x77, 0x88, 0x99 }
-    };
+    int count = 15;
+    int elements_count = 4;
 
-    unsigned char* set[3] = { rset[0], rset[1], rset[2] };
-    size_t size[3] = { 3, 2, 3 };
+    // The sets' pointer
+    unsigned char **set;
+    cudaMallocManaged(&set, count * sizeof(unsigned char *));
 
-    product_iterator(set, size, 3, process);
-}
+    // // The real sets
+    int* size;
+    cudaMallocManaged(&size, count * sizeof(int));
 
-void process(unsigned char* set[], size_t index[], size_t count)
-{
-    for (size_t i = 0; i < count; i++) {
-        printf("%x ", set[i][index[i]]);
+    for (int i = 0;i < count; i++){
+        size[i] = elements_count;
+        cudaMallocManaged(&(set[i]), size[i] * sizeof(unsigned char));
+        for (int j = 0; j < size[i]; j++){
+            set[i][j] = 0x11 * j;
+        }
     }
-    printf("\n");
+
+    long int all = 1;
+    for (int i = 0; i < count; i++) {
+        all *= size[i];
+    }
+
+    printf("%ld\n", all);
+
+    product_iterator<<<BLOCKS, THREADS>>>(set, size, count, all);
+    cudaDeviceSynchronize();
+
+    // Free memory
+    for (int i = 0;i < count; i ++){
+        cudaFree(set[i]);
+    }
+    cudaFree(set);
 }
