@@ -4,9 +4,10 @@
 #include <stdlib.h>
 
 // Used to iterate the product results according to the pointer list
-void product_iterator(unsigned char* set[], size_t size[], size_t count, void (*process)(unsigned char* set[], size_t index[], size_t count));
+void product_iterator(unsigned char* set[], int size[], int count, long int all);
 
 // Used to update the pointer list
-void increment(size_t index[], size_t size[], size_t count);
+void updateIndex(int index[], int size[], int count, long int num, long int all);
+void increment(int index[], int size[], int count, int delta[]);
 
 #endif // !C_PRODUCT_H

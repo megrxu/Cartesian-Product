@@ -1,13 +1,16 @@
 #include "c-product.cuh"
 #include <stdio.h>
 
-#define THREADS 256
-#define BLOCKS 16
+#define THREADS 1024
+#define BLOCKS 8
 
-int main()
+int main(int argc, char* argv[])
 {
-    int count = 15;
+    int count = 5;
     int elements_count = 4;
+    if (argc > 1) {
+        count = atoi(argv[1]);
+    }
 
     // The sets' pointer
     unsigned char **set;
